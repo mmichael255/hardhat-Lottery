@@ -24,7 +24,8 @@ import { Raffle, VRFCoordinatorV2Mock } from "../typechain-types"
         const fixture = await loadFixture(deployOnlocalchain)
         const raffle = fixture.raffle
         const mock = fixture.vrfMock
-        return { raffle, mock }
+        const signers = await ethers.getSigners()
+        return { raffle, mock, signers }
       }
       describe("deployMock", async () => {
         it("intitiallizes the raffle correctly", async () => {
@@ -38,17 +39,39 @@ import { Raffle, VRFCoordinatorV2Mock } from "../typechain-types"
             networkConfig[network.config.chainId!]["raffleEntranceFee"],
             (await raffle.getEntranceFee()).toString()
           )
-          assert.equal(await mock.getAddress(), await raffle.getAddress())
+          assert.equal(
+            await mock.getAddress(),
+            await raffle.getVrfCoordinator()
+          )
         })
       })
       describe("enterRaffle", async () => {
         it("revert if you don't pay enough", async () => {
-          const vrfMockFixture = await loadFixture(deployOnlocalchain)
-          const raffle = vrfMockFixture.raffle
+          const { raffle } = await getContract()
           await expect(raffle.enterRaffle()).to.be.revertedWithCustomError(
             raffle,
             "Raffle__SendMoreToEnterRaffle"
           )
+        })
+        it("records player when they enter", async () => {
+          const { raffle, signers } = await getContract()
+          const playerRaffle = raffle.connect(signers[1])
+
+          await playerRaffle.enterRaffle({
+            value: networkConfig[network.config.chainId!]["raffleEntranceFee"],
+          })
+          const constractPlayer = await raffle.getPlayer(0)
+          assert.equal(signers[1].address, constractPlayer)
+        })
+        it("emits event on enter", async () => {
+          const { raffle, signers } = await getContract()
+          const playerRaffle = raffle.connect(signers[1])
+          await expect(
+            playerRaffle.enterRaffle({
+              value:
+                networkConfig[network.config.chainId!]["raffleEntranceFee"],
+            })
+          ).to.emit(raffle, "RaffleEnter")
         })
       })
     })
