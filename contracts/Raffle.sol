@@ -189,4 +189,8 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     function getVrfCoordinator() public view returns (VRFCoordinatorV2Interface) {
         return i_vrfCoordinator;
     }
+
+    function getSubId() public view returns (uint64) {
+        return i_subscriptionId;
+    }
 }
