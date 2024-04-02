@@ -31,6 +31,9 @@ import { Raffle, VRFCoordinatorV2Mock } from "../typechain-types"
                   networkConfig[network.config.chainId!][
                       "keepersUpdateInterval"
                   ]
+
+              await mock.createSubscription()
+              await mock.addConsumer(1, raffle.getAddress())
               return { raffle, mock, signers, enteranceFee, interval }
           }
           describe("deployMock", async () => {
@@ -91,8 +94,10 @@ import { Raffle, VRFCoordinatorV2Mock } from "../typechain-types"
               it("doesn't allow enterance when raffle is caculating", async () => {
                   const { raffle, mock, signers, enteranceFee, interval } =
                       await getContract()
-                  const transactionResponse = await mock.createSubscription()
-                  await mock.addConsumer(1, raffle.getAddress())
+                  //   const transactionResponse = await mock.createSubscription()
+                  //   const transactionReceipt = await transactionResponse.wait(1)
+                  //   console.log(transactionReceipt.toJSON())
+                  //   console.log(transactionReceipt!.logs)
 
                   const playerraffle = raffle.connect(signers[1])
                   await playerraffle.enterRaffle({
