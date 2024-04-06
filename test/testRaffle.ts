@@ -99,7 +99,7 @@ import { Raffle, VRFCoordinatorV2Mock } from "../typechain-types"
                   //   const transactionReceipt = await transactionResponse.wait(1)
                   //   console.log(transactionReceipt.toJSON())
                   //   console.log(transactionReceipt!.logs[0].args[0])
-                  const subId = await mock.createSubscription.staticCall()
+                  //const subId = await mock.createSubscription.staticCall()
                   console.log(subId)
 
                   const playerraffle = raffle.connect(signers[1])
