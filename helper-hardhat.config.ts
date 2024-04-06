@@ -41,3 +41,6 @@ export const networkConfig: networkConfigInfo = {
 }
 
 export const developmentChains = ["hardhat", "localhost"]
+export const frontEndContractsFile =
+    "../nextjs-lottery/constants/contractAddresses.json"
+export const frontEndAbiFile = "../nextjs-lottery/constants/abi.json"
