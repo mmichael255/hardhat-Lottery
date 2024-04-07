@@ -4,7 +4,6 @@ import RaffleModule from "../ignition/modules/Raffle"
 import { networkConfig, developmentChains } from "../helper-hardhat.config"
 import { assert, expect } from "chai"
 import { ignition, ethers, network } from "hardhat"
-import { Raffle, VRFCoordinatorV2Mock } from "../typechain-types"
 
 !developmentChains.includes(network.name)
     ? describe.skip
