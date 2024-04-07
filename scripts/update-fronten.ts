@@ -13,7 +13,11 @@ async function main() {
         console.log("Writing to front end...")
         const raffle = await getContract()
         const raffleAddr = await raffle.getAddress()
+        // const signers = await ethers.getSigners()
+        // const raffle = await ethers.getContractAt("Raffle", signers[0])
+        // const raffleAddr = await raffle.getAddress()
         console.log(`Raffle address is ${raffleAddr}`)
+
         await updateContractAddresses(raffleAddr)
         await updateAbi(raffle)
         console.log("Front end written!")
@@ -41,7 +45,7 @@ async function updateContractAddresses(raffleAddr: string) {
     )
     if (chainid in contractAddresses) {
         if (!contractAddresses[chainid].includes(raffleAddr)) {
-            contractAddresses[chainid] = raffleAddr
+            contractAddresses[chainid] = [raffleAddr]
         }
     } else {
         contractAddresses[chainid] = [raffleAddr]
